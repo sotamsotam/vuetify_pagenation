@@ -74,77 +74,8 @@
 </template>
 
 <script>
-import TutorialDataService from "../services/TutorialDataService";
 export default {
   name: "tutorials-list",
-  data() {
-    return {
-      tutorials: [],
-      searchTitle: "",
-      headers: [
-        { text: "Title", value: "title", sortable: false },
-        { text: "Description", value: "description", sortable: false },
-        { text: "Status", value: "status", sortable: false },
-        { text: "Actions", value: "actions", sortable: false },
-      ],
-      page: 1,
-      pageSize: 3,
-      totalPages: 0,
-      pageSizes: [3, 6, 9],
-    };
-  },
-  methods: {
-    getRequestParmas(searchTitle, page, pageSize) {
-      let params = {};
-      if (searchTitle) {
-        params["title"] = searchTitle;
-      }
-      if (page) {
-        params["page"] = page - 1;
-      }
-      if (pageSize) {
-        params["size"] = pageSize;
-      }
-      return params;
-    },
-    retrieveTutorials() {
-      const params = this.getRequestParmas(
-        this.searchTitle,
-        this.page,
-        this.pageSize
-      );
-      TutorialDataService.getAll(params)
-        .then((res) => {
-          const { tutorials, totalPages } = res.data;
-          this.tutorials = tutorials.map(this.getDisplay);
-          this.totalPages = totalPages;
-          console.log(res.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    handlePageChange(value) {
-      this.page = value;
-      this.retrieveTutorials();
-    },
-    handlePageSizeChange(size) {
-      this.pageSize = size;
-      this.page = 1;
-      this.retrieveTutorials();
-    },
-    getDisplay(tutorial) {
-      return {
-        id: tutorial.id,
-        title: tutorial.title.substr(0, 20) + "...",
-        description: tutorial.description.substr(0, 20) + "...",
-        status: tutorial.published ? "Published" : "Pending",
-      };
-    },
-  },
-  mounted() {
-    this.retrieveTutorials();
-  },
 };
 </script>
 
